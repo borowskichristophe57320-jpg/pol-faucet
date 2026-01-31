@@ -1,0 +1,51 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>POL FAUCET</title>
+<meta name="description" content="POL FAUCET – Free Polygon (POL) Faucet">
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+</head>
+<body>
+
+<h1>💧 POL FAUCET</h1>
+<p>Free Polygon (POL) Faucet – Claim every 5 minutes</p>
+
+<input id="address" placeholder="Polygon wallet address">
+<br><br>
+
+<a href="https://shrinkme.click/Stakechris" target="_blank">
+  <button>Access Faucet</button>
+</a>
+
+<br><br>
+
+<div class="g-recaptcha" data-sitekey="6LefwlssAAAAAN-HKkdb8J__iCo9X8unW0rfIjDx"></div>
+
+<br>
+<button onclick="claim()">Claim 0.01 POL</button>
+
+<p id="result"></p>
+
+<script>
+async function claim(){
+  const address = document.getElementById("address").value;
+  const captcha = grecaptcha.getResponse();
+  if(!captcha){
+    alert("Complete captcha");
+    return;
+  }
+  const res = await fetch("/claim",{
+    method:"POST",
+    headers:{ "Content-Type":"application/json"},
+    body: JSON.stringify({ address, captcha })
+  });
+  const data = await res.json();
+  document.getElementById("result").innerText = data.tx || data.error;
+  grecaptcha.reset();
+}
+</script>
+
+</body>
+</html>
